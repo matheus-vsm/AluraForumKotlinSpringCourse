@@ -1,11 +1,13 @@
 package br.com.alura.forum.service
 
+import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.NovoTopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class TopicoService(
@@ -28,6 +30,22 @@ class TopicoService(
         val topico = topicoFormMapper.map(form)
         topico.id = topicos.size.toLong() + 1
         topicos = topicos.plus(topico)
+    }
+
+    fun atualizar(form: AtualizacaoTopicoForm) {
+        val topico = topicos.filter { it.id == form.id }.first()
+        topicos = topicos.minus(topico).plus(
+            Topico(
+                id = form.id,
+                titulo = form.titulo,
+                mensagem = form.mensagem,
+                autor = topico.autor,
+                curso = topico.curso,
+                respostas = topico.respostas,
+                status = topico.status,
+                dataCriacao = topico.dataCriacao
+            )
+        )
     }
 
 }
