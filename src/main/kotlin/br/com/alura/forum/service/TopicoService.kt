@@ -48,4 +48,9 @@ class TopicoService(
         )
     }
 
+    fun deletar(id: Long) {
+        val topico = topicos.filter { it.id == id }.first()
+        topicos = topicos.minus(topico)
+    }
+
 }
