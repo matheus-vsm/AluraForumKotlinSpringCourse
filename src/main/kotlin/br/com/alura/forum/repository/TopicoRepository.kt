@@ -4,5 +4,7 @@ import br.com.alura.forum.model.Topico
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface TopicoRepository: JpaRepository<Topico, Long> {
-    fun id(id: Long): MutableList<Topico>
+
+    fun findByCursoNome(nomeCurso: String): List<Topico>
+
 }

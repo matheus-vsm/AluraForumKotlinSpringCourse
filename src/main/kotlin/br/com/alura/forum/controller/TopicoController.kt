@@ -18,8 +18,10 @@ class TopicoController(
 ) {
 
     @GetMapping
-    fun listar(): List<TopicoView> {
-        return service.listar()
+    fun listar(
+        @RequestParam(required = false) nomeCurso: String? //http://localhost:8080/topicos?nomeCurso=Kotlin
+    ): List<TopicoView> {
+        return service.listar(nomeCurso)
     }
 
     @GetMapping("/{id}")
