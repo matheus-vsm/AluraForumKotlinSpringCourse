@@ -4,6 +4,7 @@ import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.NovoTopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,6 +28,7 @@ class TopicoController(
     }
 
     @PostMapping
+    @Transactional
     fun cadastrar(
         @RequestBody @Valid dto: NovoTopicoForm,
         uriBuilder: UriComponentsBuilder
@@ -38,6 +40,7 @@ class TopicoController(
     }
 
     @PutMapping
+    @Transactional
     fun atualziar(@RequestBody @Valid form: AtualizacaoTopicoForm): ResponseEntity<TopicoView> {
         val topicoView = service.atualizar(form)
 
@@ -45,6 +48,7 @@ class TopicoController(
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleter(@PathVariable id: Long) {
         service.deletar(id)
