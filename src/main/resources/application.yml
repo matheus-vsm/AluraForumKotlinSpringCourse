@@ -2,9 +2,13 @@ spring:
   application:
     name: forum
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:forum
-    username: sa
-    password:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/forum
+    username: root
+    password: mysql123
     jpa:
-      database-platform: org.hibernate.dialect.H2Dialect
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+      properties:
+        hibernate:
+          show_sql: true
+          format_sql: true

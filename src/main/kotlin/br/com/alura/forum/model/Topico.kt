@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "topico")
 data class Topico(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
