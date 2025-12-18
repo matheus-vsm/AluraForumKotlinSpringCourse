@@ -1,18 +1,26 @@
 spring:
   application:
     name: forum
+
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:forum
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:forum;DB_CLOSE_DELAY=-1
     username: sa
     password:
-    jpa:
-      database-platform: org.hibernate.dialect.H2Dialect
-      properties:
-        hibernate:
-          show_sql: true
-          format_sql: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
       hibernate:
-        ddl-auto: validate
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+
   flyway:
     enabled: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
