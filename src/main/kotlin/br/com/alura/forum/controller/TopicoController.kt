@@ -6,6 +6,7 @@ import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -40,6 +41,7 @@ class TopicoController(
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = ["topicos"], allEntries = true) // Limpa o cache "topicos", limpa todos os registros
     fun cadastrar(
         @RequestBody @Valid dto: NovoTopicoForm,
         uriBuilder: UriComponentsBuilder
@@ -52,6 +54,7 @@ class TopicoController(
 
     @PutMapping
     @Transactional
+    @CacheEvict(value = ["topicos"], allEntries = true)
     fun atualziar(@RequestBody @Valid form: AtualizacaoTopicoForm): ResponseEntity<TopicoView> {
         val topicoView = service.atualizar(form)
 
@@ -60,6 +63,7 @@ class TopicoController(
 
     @DeleteMapping("/{id}")
     @Transactional
+    @CacheEvict(value = ["topicos"], allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleter(@PathVariable id: Long) {
         service.deletar(id)
