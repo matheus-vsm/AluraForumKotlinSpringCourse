@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,7 +24,9 @@ class TopicoController(
     @GetMapping
     fun listar(
         @RequestParam(required = false) nomeCurso: String?, //http://localhost:8080/topicos?nomeCurso=Kotlin
-        @PageableDefault(size = 5) paginacao: Pageable //http://localhost:8080/topicos?size=10&page=1
+        @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable
+        //http://localhost:8080/topicos?size=10&page=1
+        //http://localhost:8080/topicos?sort=id,desc&sort=titulo
     ): Page<TopicoView> {
         return service.listar(nomeCurso, paginacao)
     }
