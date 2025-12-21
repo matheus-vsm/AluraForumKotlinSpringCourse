@@ -21,15 +21,21 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            // Define regras de autorização
             .authorizeHttpRequests { auth ->
+                // Qualquer requisição precisa estar autenticada
                 auth.anyRequest().authenticated()
             }
+            // Configuração de gerenciamento de sessão
             .sessionManagement { session ->
+                // Não cria sessão (ideal para APIs REST)
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            // Desativa login via formulário HTML
             .formLogin { form ->
                 form.disable()
             }
+            // Ativa autenticação via HTTP Basic
             .httpBasic { }
 
         return http.build()
@@ -40,13 +46,16 @@ class SecurityConfig(
         http: HttpSecurity,
         passwordEncoder: PasswordEncoder
     ): AuthenticationManager {
+        // Obtém o AuthenticationManagerBuilder compartilhado pelo Spring
         val authenticationManagerBuilder =
             http.getSharedObject(AuthenticationManagerBuilder::class.java)
 
+        // Define como o Spring vai autenticar usuários
         authenticationManagerBuilder
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder)
+            .userDetailsService(userDetailsService) // Busca usuários
+            .passwordEncoder(passwordEncoder) // Valida senhas com BCrypt
 
+        // Cria o AuthenticationManager
         return authenticationManagerBuilder.build()
     }
 
