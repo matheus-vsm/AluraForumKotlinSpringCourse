@@ -8,7 +8,7 @@ class UserDetail(
     private val usuario: Usuario
 ) : UserDetails {
 
-    override fun getAuthorities(): Collection<GrantedAuthority> = emptyList()
+    override fun getAuthorities(): usuario.role
 
     override fun getPassword() = usuario.password
 
