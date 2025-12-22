@@ -23,6 +23,8 @@ class SecurityConfig(
         http
             // Define regras de autorização
             .authorizeHttpRequests { auth ->
+                // Requisições para /topicos exigem a autoridade "LEITURA_ESCRITA"
+                auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
                 // Qualquer requisição precisa estar autenticada
                 auth.anyRequest().authenticated()
             }

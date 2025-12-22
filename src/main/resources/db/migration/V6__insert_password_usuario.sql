@@ -1,2 +1,2 @@
 update usuario set password = '$2a$12$QAHyVJomlRdidPTc.Vo3XObQ3i7VuUpmKgCKyHPU3.f9BURBlzl8O' where id = 1;
-insert into usuario values(2, 'Alice Kojima', 'alice@email.com', '$2a$12$.Fxrpb7XFrwLSK5Z7FvHHORV0w.DjNF1z7cK/IJ44.Sr81ixYRNZe');
+insert into usuario values(2, 'Alice Kojima', 'alice@email.com', '$2a$12$BXU2KEjtSrXwZ7gTu5ViteNqJONUXSeW6m6GrwlGWbQkMfCTM4HcC');

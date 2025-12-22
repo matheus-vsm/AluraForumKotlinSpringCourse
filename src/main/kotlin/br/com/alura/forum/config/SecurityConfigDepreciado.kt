@@ -17,6 +17,7 @@
 //
 //    override fun configure(http: HttpSecurity) {
 //        http?.authorizeRequests()?.
+//        antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.
 //        anyRequest()?.
 //        authenticated()?.
 //        and()?.

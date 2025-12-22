@@ -13,9 +13,14 @@ data class Usuario(
     val email: String,
     val password: String,
 
+    // Relacionamento Many-to-Many com tabela intermediária
     @ManyToMany(fetch = FetchType.EAGER) // Carrega os roles junto com o usuário
-    @JoinColumn(name = "usuario_role")
-    @JsonIgnore // Evita serialização para prevenir problemas de recursão infinita
+    @JoinTable(
+        name = "usuario_role", // nome da tabela de junção
+        joinColumns = [JoinColumn(name = "usuario_id")], // FK para Usuario
+        inverseJoinColumns = [JoinColumn(name = "role_id")] // FK para Role
+    )
+    @JsonIgnore // Evita loop infinito na serialização JSON
     val role: List<Role> = mutableListOf()
 
 )
