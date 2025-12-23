@@ -10,15 +10,19 @@ import java.util.Date
 class JWTUtil {
 
     private val expiration: Long = 3600000 // 1 hour in milliseconds
+
     @Value("\${jwt.secret}")
     private lateinit var secret: String // gera a variavel secret apenas quando for inicializada
 
     fun generateToken(username: String): String? {
         return Jwts.builder()
-            .setSubject(username)
-            .setExpiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(SignatureAlgorithm.HS512, secret.toByteArray())
-            .compact()
+            .setSubject(username) // Define o "dono" do token (normalmente o username)
+            .setExpiration(Date(System.currentTimeMillis() + expiration)) // Define quando o token irá expirar
+            .signWith(
+                SignatureAlgorithm.HS512,
+                secret.toByteArray()
+            ) // Assina o token usando o algoritmo HS512 e a chave secreta
+            .compact() // Gera o token final no formato String
     }
 
 }

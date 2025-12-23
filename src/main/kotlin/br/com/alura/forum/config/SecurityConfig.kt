@@ -11,11 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val userDetailsService: UserDetailsService
+    private val userDetailsService: UserDetailsService,
+    private val jwtUtil: JWTUtil
 ) {
 
     @Bean
@@ -24,10 +26,20 @@ class SecurityConfig(
             // Define regras de autorização
             .authorizeHttpRequests { auth ->
                 // Requisições para /topicos exigem a autoridade "LEITURA_ESCRITA"
-                auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
+                //auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
+
+                // Permite acesso a /login sem autenticação
+                auth.requestMatchers("/login").permitAll()
                 // Qualquer requisição precisa estar autenticada
                 auth.anyRequest().authenticated()
             }
+            .addFilterBefore(
+                JWTLoginFilter(
+                    authManager = authenticationManager(),
+                    jwtUtil = jwtUtil
+                ),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
             // Configuração de gerenciamento de sessão
             .sessionManagement { session ->
                 // Não cria sessão (ideal para APIs REST)

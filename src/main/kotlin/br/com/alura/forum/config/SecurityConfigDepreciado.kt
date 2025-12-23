@@ -13,16 +13,18 @@
 //@EnableWebSecurity
 //class SecurityConfigDepreciado(
 //    private val userDetailsService: UserDetailsService
+//    private val jwtUtil: JWTUtil
 //) : WebSecurityConfigurerAdapter(){
 //
 //    override fun configure(http: HttpSecurity) {
 //        http?.authorizeRequests()?.
-//        antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.
+//        //antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.
+//        antMatchers("/login")?.permitAll()?.
 //        anyRequest()?.
 //        authenticated()?.
-//        and()?.
-//        sessionManagement()?.
-//        sessionCreationPolicy(SessionCreationPolicy.STATELESS)?.
+//        and().
+//        http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
+//        http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)?.
 //        and()?.
 //        formLogin()?.
 //        disable()?.
