@@ -19,16 +19,13 @@
 //    override fun configure(http: HttpSecurity) {
 //        http?.authorizeRequests()?.
 //        //antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.
-//        antMatchers("/login")?.permitAll()?.
+//        antMatchers(HttpMethod.POST, "/login")?.permitAll()?.
 //        anyRequest()?.
 //        authenticated()?.
 //        and().
 //        http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
-//        http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)?.
-//        and()?.
-//        formLogin()?.
-//        disable()?.
-//        httpBasic()
+//        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil = jwtUtil), OncePerRequestFilter::class.java)?
+//        http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)?
 //    }
 //
 //    override fun configure(auth: AuthenticationManagerBuilder) {

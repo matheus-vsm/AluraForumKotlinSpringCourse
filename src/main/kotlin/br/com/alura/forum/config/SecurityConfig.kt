@@ -3,6 +3,7 @@ package br.com.alura.forum.config
 import br.com.alura.forum.security.JWTLoginFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -18,7 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig(
     private val userDetailsService: UserDetailsService,
-    private val jwtUtil: JWTUtil
+    private val jwtUtil: JWTUtil,
+    private val authenticationManager: AuthenticationManager
 ) {
 
     @Bean
@@ -30,15 +32,21 @@ class SecurityConfig(
                 //auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
 
                 // Permite acesso a /login sem autenticação
-                auth.requestMatchers("/login").permitAll()
+                auth.requestMatchers(HttpMethod.POST, "/login").permitAll()
                 // Qualquer requisição precisa estar autenticada
                 auth.anyRequest().authenticated()
             }
+            // Filtro de login (gera o JWT)
             .addFilterBefore(
                 JWTLoginFilter(
-                    authManager = authenticationManager(),
+                    authManager = authenticationManager,
                     jwtUtil = jwtUtil
                 ),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
+            // Filtro que valida o JWT em TODAS as requisições
+            .addFilterBefore(
+                JWTAuthenticationFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             // Configuração de gerenciamento de sessão
@@ -46,12 +54,6 @@ class SecurityConfig(
                 // Não cria sessão (ideal para APIs REST)
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            // Desativa login via formulário HTML
-            .formLogin { form ->
-                form.disable()
-            }
-            // Ativa autenticação via HTTP Basic
-            .httpBasic { }
 
         return http.build()
     }

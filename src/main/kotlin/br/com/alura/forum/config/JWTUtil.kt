@@ -3,6 +3,8 @@ package br.com.alura.forum.config
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.util.Date
 
@@ -23,6 +25,20 @@ class JWTUtil {
                 secret.toByteArray()
             ) // Assina o token usando o algoritmo HS512 e a chave secreta
             .compact() // Gera o token final no formato String
+    }
+
+    fun isValid(jwt: String?): Boolean {
+        return try {
+            Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt)
+            true
+        } catch (e: IllegalArgumentException) {
+            false
+        }
+    }
+
+    fun getAuthentication(jwt: String?): Authentication {
+        val username = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt).body.subject
+        return UsernamePasswordAuthenticationToken(username, null, null)
     }
 
 }
