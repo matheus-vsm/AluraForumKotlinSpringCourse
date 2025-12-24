@@ -47,10 +47,10 @@ class JWTLoginFilter(
     ) {
 
         // Obtém o usuário autenticado
-        val username = (authResult?.principal as UserDetails).username
+        val user = (authResult.principal as UserDetails)
 
         // Gera o token JWT com base no username
-        val token = jwtUtil.generateToken(username)
+        val token = jwtUtil.generateToken(user.username, user.authorities)
 
         // Adiciona o token JWT no header da resposta
         // Exemplo: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...

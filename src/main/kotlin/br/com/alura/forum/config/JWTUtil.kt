@@ -1,16 +1,20 @@
 package br.com.alura.forum.config
 
+import br.com.alura.forum.service.UsuarioService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Component
 import java.util.Date
 
 @Component
-class JWTUtil {
+class JWTUtil(
+    private val usuarioService: UsuarioService
+) {
 
     private val expiration: Long = 3600000 // 1 hour in milliseconds
 
@@ -21,9 +25,10 @@ class JWTUtil {
         Keys.hmacShaKeyFor(secret.toByteArray())
     }
 
-    fun generateToken(username: String): String? {
+    fun generateToken(username: String, authorities: MutableCollection<out GrantedAuthority>): String? {
         return Jwts.builder()
             .setSubject(username) // Define o "dono" do token (normalmente o username)
+            .claim("role", authorities)
             .setExpiration(Date(System.currentTimeMillis() + expiration)) // Define quando o token irá expirar
             .signWith(SignatureAlgorithm.HS512, key)
             .compact() // Gera o token final no formato String
@@ -43,7 +48,8 @@ class JWTUtil {
 
     fun getAuthentication(jwt: String?): Authentication {
         val username = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt).body.subject
-        return UsernamePasswordAuthenticationToken(username, null, emptyList())
+        val user = usuarioService.loadUserByUsername(username)
+        return UsernamePasswordAuthenticationToken(username, null, user.authorities)
     }
 
 }

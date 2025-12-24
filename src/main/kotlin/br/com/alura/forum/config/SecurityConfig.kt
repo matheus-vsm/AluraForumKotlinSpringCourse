@@ -35,7 +35,7 @@ class SecurityConfig(
             // Define regras de autorização
             .authorizeHttpRequests { auth ->
                 // Requisições para /topicos exigem a autoridade "LEITURA_ESCRITA"
-                //auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
+                auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
 
                 // Permite acesso a /login sem autenticação
                 auth.requestMatchers(HttpMethod.POST, "/login").permitAll()
