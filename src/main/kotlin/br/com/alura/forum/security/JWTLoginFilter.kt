@@ -22,8 +22,8 @@ class JWTLoginFilter(
 
     // Metodo chamado quando alguém tenta se autenticar (login)
     override fun attemptAuthentication(
-        request: HttpServletRequest?,
-        response: HttpServletResponse?
+        request: HttpServletRequest,
+        response: HttpServletResponse
     ): Authentication {
 
         // Lê o corpo da requisição (JSON) e converte para a classe Credentials
@@ -40,10 +40,10 @@ class JWTLoginFilter(
 
     // Metodo chamado automaticamente quando a autenticação é bem-sucedida
     override fun successfulAuthentication(
-        request: HttpServletRequest?,
-        response: HttpServletResponse?,
-        chain: FilterChain?,
-        authResult: Authentication?
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        chain: FilterChain,
+        authResult: Authentication
     ) {
 
         // Obtém o usuário autenticado

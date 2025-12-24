@@ -26,4 +26,4 @@ spring:
       path: /h2-console
 
 jwt:
-  secret: secreto
+  secret: "senha-super-secreta-para-assinatura-do-token-senha-super-secreta-para-assinatura-do-token"

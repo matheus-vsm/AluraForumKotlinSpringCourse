@@ -17,14 +17,16 @@
 //) : WebSecurityConfigurerAdapter(){
 //
 //    override fun configure(http: HttpSecurity) {
-//        http?.authorizeRequests()?.
+//        http?.
+//        csrf()?.disable()?.
+//        authorizeRequests()?.
 //        //antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.
 //        antMatchers(HttpMethod.POST, "/login")?.permitAll()?.
 //        anyRequest()?.
 //        authenticated()?.
 //        and().
 //        http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
-//        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil = jwtUtil), OncePerRequestFilter::class.java)?
+//        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)?
 //        http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)?
 //    }
 //

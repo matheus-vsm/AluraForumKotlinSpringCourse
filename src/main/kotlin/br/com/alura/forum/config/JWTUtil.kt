@@ -2,6 +2,7 @@ package br.com.alura.forum.config
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -16,29 +17,33 @@ class JWTUtil {
     @Value("\${jwt.secret}")
     private lateinit var secret: String // gera a variavel secret apenas quando for inicializada
 
+    private val key by lazy {
+        Keys.hmacShaKeyFor(secret.toByteArray())
+    }
+
     fun generateToken(username: String): String? {
         return Jwts.builder()
             .setSubject(username) // Define o "dono" do token (normalmente o username)
             .setExpiration(Date(System.currentTimeMillis() + expiration)) // Define quando o token irá expirar
-            .signWith(
-                SignatureAlgorithm.HS512,
-                secret.toByteArray()
-            ) // Assina o token usando o algoritmo HS512 e a chave secreta
+            .signWith(SignatureAlgorithm.HS512, key)
             .compact() // Gera o token final no formato String
     }
 
     fun isValid(jwt: String?): Boolean {
         return try {
-            Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt)
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jwt)
             true
-        } catch (e: IllegalArgumentException) {
+        } catch (e: Exception) {
             false
         }
     }
 
     fun getAuthentication(jwt: String?): Authentication {
         val username = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt).body.subject
-        return UsernamePasswordAuthenticationToken(username, null, null)
+        return UsernamePasswordAuthenticationToken(username, null, emptyList())
     }
 
 }

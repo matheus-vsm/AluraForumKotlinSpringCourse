@@ -1,5 +1,6 @@
 package br.com.alura.forum.config
 
+import br.com.alura.forum.security.JWTAuthenticationFilter
 import br.com.alura.forum.security.JWTLoginFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,14 +19,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val userDetailsService: UserDetailsService,
-    private val jwtUtil: JWTUtil,
-    private val authenticationManager: AuthenticationManager
+    private val jwtUtil: JWTUtil
 ) {
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(
+        http: HttpSecurity,
+        authenticationManager: AuthenticationManager
+    ): SecurityFilterChain {
         http
+            // Desabilita CSRF para APIs REST
+            .csrf { csrf ->
+                csrf.disable()
+            }
             // Define regras de autorização
             .authorizeHttpRequests { auth ->
                 // Requisições para /topicos exigem a autoridade "LEITURA_ESCRITA"
@@ -61,6 +67,7 @@ class SecurityConfig(
     @Bean
     fun authenticationManager(
         http: HttpSecurity,
+        userDetailsService: UserDetailsService,
         passwordEncoder: PasswordEncoder
     ): AuthenticationManager {
         // Obtém o AuthenticationManagerBuilder compartilhado pelo Spring
