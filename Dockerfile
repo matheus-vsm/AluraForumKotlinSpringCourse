@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk23
+FROM eclipse-temurin:21-jdk
 EXPOSE 8080
 ADD target/forum-0.0.1-SNAPSHOT.jar forum.jar
-ENTRYPOINT ["java","jar","forum.jar"]
+ENTRYPOINT ["java","-jar","forum.jar"]
