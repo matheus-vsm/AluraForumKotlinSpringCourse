@@ -1,0 +1,1 @@
+ALTER table topico add COLUMN data_alteracao date;
