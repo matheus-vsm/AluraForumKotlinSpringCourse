@@ -2,11 +2,11 @@ package br.com.alura.forum.controller
 
 import br.com.alura.forum.config.JWTUtil
 import br.com.alura.forum.model.Role
+import br.com.alura.forum.model.UsuarioTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.ResponseEntity.status
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -77,8 +77,9 @@ class TopicoControllerTest {
 
     private fun gerarToken(): String? {
         val authorities = mutableListOf(Role(1, "LEITURA_ESCRITA"))
+        val usuario = UsuarioTest.buildToToken()
 
-        return jwtUtil.generateToken("ana@email.com", authorities)
+        return jwtUtil.generateToken(usuario.email, authorities)
     }
 
 }
