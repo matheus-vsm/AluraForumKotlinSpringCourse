@@ -37,8 +37,11 @@ class SecurityConfig(
                 // Requisições para /topicos exigem a autoridade "LEITURA_ESCRITA"
                 auth.requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
 
-                // Permite acesso a /login sem autenticação
+                // Permite acesso a /login, /swagger-ui/ e /v3/api-docs/ sem autenticação
                 auth.requestMatchers(HttpMethod.POST, "/login").permitAll()
+                auth.requestMatchers("/swagger-ui/**").permitAll()
+                auth.requestMatchers("/v3/api-docs/**").permitAll()
+
                 // Qualquer requisição precisa estar autenticada
                 auth.anyRequest().authenticated()
             }
